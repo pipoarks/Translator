@@ -1,7 +1,7 @@
-
 import os
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # Import the CORS module
 from langchain_community.chat_models import ChatOpenAI
 
 # Load environment variables
@@ -13,6 +13,9 @@ OPENAI_MODEL_API_KEY = os.getenv("OPENAI_MODEL_API_KEY")
 
 # Initialize the Flask application
 app = Flask(__name__)
+
+# Enable CORS for all routes, allowing only requests from 'https://nihongotranslator.com'
+CORS(app, origins=["https://nihongotranslator.com"])
 
 # Initialize the ChatOpenAI model
 llm = ChatOpenAI(model_name=OPENAI_MODEL, openai_api_key=OPENAI_MODEL_API_KEY)
@@ -27,7 +30,6 @@ def translate():
         return jsonify({"error": "No input provided"}), 400
 
     # Construct the prompt
-    # prompt = f"Romaji to Japanese translation is: {user_input}"
     prompt = f"Translate the given Romaji '{user_input}' into a single Japanese word. Only provide the Japanese word without any explanations."
 
     # Get the AI response

@@ -15,7 +15,13 @@ OPENAI_MODEL_API_KEY = os.getenv("OPENAI_MODEL_API_KEY")
 app = Flask(__name__)
 
 # Enable CORS for all routes, allowing only requests from 'https://nihongotranslator.com'
-CORS(app, origins=["https://nihongotranslator.com"])
+#CORS(app, origins=["https://nihongotranslator.store"])
+
+
+
+# Enable CORS for both origins and allow OPTIONS preflight requests
+CORS(app, origins=["https://nihongotranslator.com", "https://nihongotranslator.store"], methods=["GET", "POST", "OPTIONS"], supports_credentials=True)
+
 
 # Initialize the ChatOpenAI model
 llm = ChatOpenAI(model_name=OPENAI_MODEL, openai_api_key=OPENAI_MODEL_API_KEY)
@@ -45,4 +51,5 @@ def translate():
     return jsonify({"response": response_text})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
+    
